@@ -1,0 +1,11 @@
+Structured Programming I
+CSE 4107
+3.00
+
+Structured Programming I Lab
+CSE 4105
+1.50
+
+Some Absurd Course
+CSE 4101
+5.00
