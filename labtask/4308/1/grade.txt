@@ -1,0 +1,5 @@
+student_id GPA Semester 
+1 4 3rd
+2 2.9 1st
+3 3.8 7th
+4 3.5 Msc

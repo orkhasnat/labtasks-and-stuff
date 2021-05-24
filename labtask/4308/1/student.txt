@@ -1,0 +1,7 @@
+student_id name age blood_group dept_name no_of_faculties hometown mobile_number 
+1 Kuri 20 O- CSE 20 Dhaka 12345 
+2 Jill 20 O+ EEE 32 Cumilla 58963 
+3 Fork 25 AB+ ME 14 Dhaka 78965 
+4 Towl 34 AB- EEE 32 Cumilla 74123 
+  Qtile	65	X+	NSU	Comilla	58741
+6 Lilo 21 O+ CSE 21 Cumilla 92832 
