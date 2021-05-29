@@ -1,0 +1,96 @@
+--Task 1
+
+CREATE USER USER1113 IDENTIFIED BY iutcse;
+GRANT CREATE SESSION, RESOURCE TO USER1113;
+GRANT UNLIMITED TABLESPACE TO USER1113;
+
+--Task 2
+
+connect USER1113@orclpdb
+
+CREATE TABLE student
+(
+Id INT PRIMARY KEY,
+Name VARCHAR2(20),
+Semester VARCHAR(20),
+NO_of_course_taken INT,
+Department VARCHAR(10),
+Head_of_dept VARCHAR(20)
+);
+
+CREATE TABLE marksheetsheets
+(
+Student_ID INT,
+Course VARCHAR(20),
+grade VARCHAR(10)
+);
+
+For the Student table, Student_id should be defined as primary key as it will always be unique.
+
+INSERT INTO student VALUES (1, 'Ishtar', '1st', 12, 'CSE', 'Lucifer');
+INSERT INTO student VALUES (1, 'Lazarus', '2nd', 8, 'EEE', 'Dryad');
+
+
+
+--Task 3
+
+INSERT INTO student VALUES (1, 'Ishtar', '1st', 12, 'CSE', 'Lucifer');
+INSERT INTO student VALUES (1, 'Lazarus', '2nd', 8, 'EEE', 'Dryad');
+ERROR at line 1:
+ORA-00001: unique constraint (USER1113.SYS_C007474) violated
+
+--Task 4
+
+No, we cannot as the values of the Student_id are not unique.
+
+--Task 5
+
+
+INSERT INTO student VALUES (15001, 'Sullivan', '3rd', 12, 'CSE', 'Lucifer');
+INSERT INTO student (Id,Name,No_of_course_taken,Department,Head_of_dept) VALUES (152206, 'Lazarus', 8, 'EEE', 'Dryad');
+INSERT INTO student VALUES (152208, 'Ishtar', '2nd', 9, 'EEE', 'Dryad');
+INSERT INTO student VALUES (151110, 'Kaya', '1st', 5, 'MCE', 'Indriva');
+INSERT INTO student VALUES (150020, 'Asmodeus', '7th', 31, 'CSE', 'Lucifer');
+
+
+INSERT INTO marksheet VALUES (150005, 'DBMS', 'B');
+INSERT INTO marksheet VALUES (150020, 'Data Structures', 'A-');
+INSERT INTO marksheet VALUES (150005, 'Programming', 'B+');
+INSERT INTO marksheet VALUES (150007, 'Sociology', 'A+');
+INSERT INTO marksheet VALUES (150023, 'Programming', 'A');
+INSERT INTO marksheet VALUES (150008, 'Discrete Math', 'C');
+INSERT INTO marksheet VALUES (150023, 'Data Mining', 'SS');
+
+SELECT * FROM students;
+
+SELECT * FROM marksheet;
+
+--Task 6
+
+STUDENT_ID     NAME                 SEMES    NO_OF_COURSE_TAKEN   DEPAR
+-------------------    -----------------       ------------ ------------------------------------ --------------
+HEAD_OF_DEPT
+--------------------
+    150001              Sullivan               3rd            12                                           CSE
+Lucifer
+
+    152206              Lazarus                                 8                                            EEE
+Dryad
+
+    152208              Ishtar                   2nd           9                                            EEE
+Dryad
+
+
+STUDENT_ID     NAME                 SEMES    NO_OF_COURSE_TAKEN   DEPAR
+-------------------    -----------------       ------------ ------------------------------------ --------------
+HEAD_OF_DEPT
+--------------------
+    151110               Kaya                      1st            5                                           MCE
+Indriva
+
+    150020             Asmodeus             7th           31                                          CSE
+Lucifer
+
+--Task 7
+
+INSERT INTO marksheet VALUES (150032, ’OOP’, ’89’);

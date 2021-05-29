@@ -1,0 +1,107 @@
+--Task 1
+CREATE TABLE Department
+(
+Dept_name VARCHAR2(6),
+Dept_id INT,
+Established_Year INT,
+CONSTRAINT dept_name_chck PRIMARY KEY(Dept_name)
+);
+CREATE TABLE Student_info
+(
+Student_Id INT,
+Student_name VARCHAR2(20),
+CGPA VARCHAR2(10),
+Hometown VARCHAR2(15),
+Mobile_No VARCHAR2(15),
+S_Department VARCHAR(10),
+CONSTRAINT std_id_chk PRIMARY KEY(Student_Id),
+CONSTRAINT refer_deptname FOREIGN KEY(S_Department) REFERENCES Department(Dept_name)
+);
+CREATE TABLE Employes_info
+(
+E_ID INT,
+Name VARCHAR2(25),
+Salary INT,
+HomeTown VARCHAR2(10),
+E_department VARCHAR(10),
+CONSTRAINT e_id_chk PRIMARY KEY(E_ID),
+CONSTRAINT refer_edepartment FOREIGN KEY(E_Department) REFERENCES Department(dept_name)
+);
+
+
+
+INSERT INTO Department VALUES('CSE',4,1999);
+INSERT INTO Department VALUES('EEE',2,1998);
+INSERT INTO Student_info VALUES (13,'Ork','4.00','Dhaka','0123456789','CSE');
+INSERT INTO Student_info VALUES (14,'Robin','4.00','Dhaka','0123456789','CSE');
+INSERT INTO Student_info VALUES (14,'Robin','4.00','Dhaka','0123456789','EEE');
+ORA-00001: unique constraint (SYSTEM.STD_ID_CHK) violated
+INSERT INTO Student_info VALUES (1,'Azaj','4.00','Dhaka','0123456789','EEE');
+ORA-00001: unique constraint (SYSTEM.STD_ID_CHK) violated
+
+SELECT Student_Id, Dept_id FROM Student_info , Department;
+
+First we would need to add a new coloum "Philosophy" in there and then add the new information.
+
+
+--Task 2
+
+CREATE TABLE Department
+(
+Dept_name VARCHAR2(6),
+Dept_id INT,
+Established_Year INT,
+CONSTRAINT dept_name_chck PRIMARY KEY(Dept_name)
+);
+CREATE TABLE Instructor(
+I_ID VARCHAR(20),
+Name VARCHAR(50);
+Salary INT,
+Hometown VARCHAR(20),
+I_Dept VARCHAR(6),
+CONSTRAINT i_id_chck PRIMARY KEY(I_ID),
+CONSTRAINT refer_idepartment FOREIGN KEY(I_Dept) REFERENCES Department(Dept_name)
+);
+CREATE TABLE Course(
+Course_ID VARCHAR(10),
+Dept VARCHAR(6),
+C_name VARCHAR(30),
+Taught_by VARCHAR(20),
+Credit VARCHAR(5),
+CONSTRAINT Course_id_chck PRIMARY KEY(Course_ID),
+CONSTRAINT refer_department FOREIGN KEY(Dept) REFERENCES Department(Dept_name),
+CONSTRAINT refer_teacher FOREIGN KEY(Taught_by) REFERENCES Department(I_ID)
+);
+INSERT INTO Department VALUES('CSE',4,1999);
+INSERT INTO Department VALUES('EEE',2,1998);
+INSERT INTO Department VALUES('EEE',3,1998);
+ORA-00001: unique constraint (SQL_SOSSPIHZAQIEXLKXKDXAOGBKO.DEPT_NAME_CHCK) violated
+
+
+
+--Task 3
+ALTER TABLE Employes_info
+DROP COLUMN Hometown;
+
+ALTER TABLE Department
+ADD Building varchar(5);
+
+CREATE TABLE Temp(
+Course_name VARCHAR(10),
+Dept VARCHAR(6),
+C_name VARCHAR(30),
+Taught_by VARCHAR(20),
+Credit VARCHAR(5),
+CONSTRAINT Course_id_chck PRIMARY KEY(Course_ID),
+CONSTRAINT refer_department FOREIGN KEY(Dept) REFERENCES Department(Dept_name),
+CONSTRAINT refer_teacher FOREIGN KEY(Taught_by) REFERENCES Department(I_ID)
+);
+INSERT INTO Temp SELECT * FROM Course;
+UPDATE Course SET Course_Name = Course_ID;
+ALTER TABLE COURSE
+DROP COLUMN Course_ID;
+
+ALTER TABLE Instructor
+DROP CONSTRAINT i_id_chk;
+ALTER TABLE Intrsuctor
+ADD CONSTRAINT new PRIMARY KEY (I_ID, Name);
