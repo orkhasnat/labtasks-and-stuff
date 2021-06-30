@@ -1,4 +1,5 @@
 #!/usr/bin/bash
+echo "Please call this script from the parent folder or it will be disastarous!!"
 echo "Enter the lab number (ie 1,2...)"
 read lab
 cp $lab/*.cpp submission
