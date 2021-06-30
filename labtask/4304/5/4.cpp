@@ -60,13 +60,16 @@ class BinarySearchTree
         Node *tmp=root;
         while (tmp)
         {
-            if (val < tmp->data)
+            if (val < tmp->data){
+            	tmp->sub++;
                 tmp = tmp->left;
-            else if (val > tmp->data)
+            }
+            else if (val > tmp->data){
+				tmp->sub++;
                 tmp = tmp->right;
+            }
             else
                 break; // because after insertion the new node will be child node            
-                tmp->sub++;
         }
     }
 
@@ -98,7 +101,7 @@ int BinarySearchTree::query(int val)
         {
             count++;                      // as the parent is eligible so the count is increased by 1
             if (temp->left)               // tmp has left child ie tmp->left not null
-                count += temp->left->sub; //count all the children
+                count += temp->left->sub+1; //count all the children and itself
             temp = temp->right;
         }
     }
