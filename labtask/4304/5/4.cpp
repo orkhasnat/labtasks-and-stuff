@@ -2,6 +2,8 @@
 #include <stack>
 using std::cin, std::cout, std::endl;
 
+// may be some problems in thsi solution
+
 class BinarySearchTree
 {
     bool flag = false; // see if reservation can be done or not
