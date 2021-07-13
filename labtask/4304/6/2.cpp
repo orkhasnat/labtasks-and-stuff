@@ -148,7 +148,7 @@ class AVLtree
         A->left = Br;
         if (Br) // if Br is null then it has no parent pointer
             Br->parent = A;
-        __update(A); //goes up recursively
+        update_height(A);
     }
     void RRrotation(Node *A)
     { // left rotation
@@ -175,7 +175,7 @@ class AVLtree
         A->right = Bl;
         if (Bl) // if Bl is null then it has no parent pointer
             Bl->parent = A;
-        __update(A); //goes up recursively
+        update_height(A); //goes up recursively
     }
     void LRrotation(Node *A)
     { // Easy way:
@@ -214,7 +214,7 @@ class AVLtree
         C->right = A;
         //fix heights
         __update(B);
-        __update(A);
+        update_height(A);
     }
     void RLrotation(Node *A)
     {
@@ -254,7 +254,7 @@ class AVLtree
         C->right = B;
         //fix heights
         __update(B);
-        __update(A);
+        update_height(A);
     }
 
 public:
@@ -296,6 +296,3 @@ int main()
 // 12 9/8 5 11 20 4 7 17 18 -1
 // 12 9 5 11 20 15 7 3 6 27 -1
 // 10 5 4 2 13 27 6 7 20 25 26 3 -1
-
-// Q1. root 5 or 13?
-// Q2. why 5(-2) in the end?
