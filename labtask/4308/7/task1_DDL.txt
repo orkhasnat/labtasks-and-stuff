@@ -1,0 +1,62 @@
+-- 190041113
+
+-- Practice is many to many because there can be multiple timeslots during which a doctor can practice. On same timeslot, many different doctors can practice.
+
+-- Appointment is many to many because a patient can take appointment from one or more doctors. One doctor can visit many patients.
+
+-- Chamber is one to many because a room can be placed at only one floor, but a floor can contain many rooms.
+
+
+CREATE TABLE receptionist (
+  name VARCHAR(20),
+  salary NUMBER(10),
+  constraint pk_receptionist primary key name
+);
+
+CREATE TABLE Doctor (
+  name VARCHAR(20),
+  age NUMBER(10),
+  qualification VARCHAR(20),
+  specialization VARCHAR(20),
+  Visiting_hours VARCHAR(5),
+  constraint pk_doctor primary key name
+);
+
+CREATE TABLE Time_slot (
+  start_time NUMBER(10),
+  end_time NUMBER(10),
+  constraint pk_s primary key start_time,
+  constraint pk_e primary key end_time,
+  constraint fk_doc foreign Key doc references Doctor(name)
+);
+
+CREATE TABLE Patient (
+  name VARCHAR(20),
+  age NUMBER(10),
+  gender VARCHAR(20),
+  medical_records VARCHAR(50),
+  height NUMBER(10),
+  weight NUMBER(10),
+  diagnosis_records VARCHAR(50),
+  constraint pk_patient primary key name
+);
+
+CREATE TABLE Floor (
+  Floor_no NUMBER(10),
+  purpose VARCHAR(10),
+  capacity NUMBER(10),
+  constraint pk_floor primary key floor_no
+);
+
+
+CREATE TABLE Room (
+  room_no NUMBER(10),
+  purpose VARCHAR(10),
+  capacity NUMBER(10),
+  constraint pk_rooms primary key room_no
+  constraint fk_floor foreign Key floorr references Floor(f_id)
+);
+
+
+
+

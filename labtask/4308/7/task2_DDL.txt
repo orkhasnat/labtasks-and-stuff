@@ -1,0 +1,64 @@
+-- 190041113
+
+-- The realtionship between Vehicle and Citizen is one to many as one citizen can own multiple vehicles.
+
+-- The realtionship between accident and License is many to one as a specfic lincese holder can face multiple accidents
+
+-- The realtionship between Vehicle and Accident is many to many as a vehicle can face multiple accidents and there may be multiple accidents with multiple vehicles
+
+-- The realtionship between Citizen and License is one to one as one citizen can have only one license
+
+CREATE TABLE Vehicle
+(
+    ID INT,
+    Type VARCHAR2(30),
+    Date_of_registration VARCHAR2(30),
+    Desciption VARCHAR2(30),
+    Colour VARCHAR2(30),
+    Engine VARCHAR2(30),
+    CONSTRAINT Vehicle_pk PRIMARY KEY(ID),
+    CONSTRAINT Vehicle_fk FOREIGN KEY(NID) REFERENCES Citizen(NID)
+);
+
+CREATE TABLE Citizen
+(
+    NID INT,
+    Name VARCHAR2(30),
+    DOB VARCHAR2(30),
+    Address VARCHAR2(30),
+    Contact VARCHAR2(30),
+    vehicle_id VARCHAR2(30),
+    CONSTRAINT Citizen_pk PRIMARY KEY (NID),
+    
+);
+
+CREATE TABLE Accident
+(
+    Date VARCHAR2(30),
+    Time VARCHAR2(30),
+    Place VARCHAR2(30),
+    Vehicle_id VARCHAR2(30),
+    License_id VARCHAR2(30),
+    CONSTRAINT Accident_pk PRIMARY KEY (Date, Time, Place, Vehicle_id, License_id),
+    CONSTRAINT Vehicle_fk FOREIGN KEY(Vehicle_id) REFERENCES Vehicle(ID),
+    CONSTRAINT License_fk FOREIGN KEY(License_id) REFERENCES License(ID)
+);
+
+CREATE TABLE License
+(
+    ID INT,
+    Date_of_issue VARCHAR2(30),
+    Expire_date VARCHAR2(30),
+    Blood_groupVARCHAR2(30),
+    Nid INT,
+    CONSTRAINT License_pk PRIMARY KEY (ID),
+    CONSTRAINT License_fk FOREIGN KEY(NID) REFERENCES Citizen(NID) 
+);
+
+CREATE TABLE Accident_occurs
+(
+    Vehicle_id VARCHAR2(30),
+    License_id VARCHAR2(30),
+    CONSTRAINT Vehicle_fk FOREIGN KEY(vehicle_id) REFERENCES Vehicle(id),
+    CONSTRAINT License_fk FOREIGN KEY(license_id) REFERENCES License(id)
+);  
