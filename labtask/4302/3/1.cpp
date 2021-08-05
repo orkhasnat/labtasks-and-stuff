@@ -54,7 +54,7 @@ bool operator==(Coord &a, Coord &b)
     float q = a.getDistance();
     float w = b.getDistance();
     return q == w;
-    //return a.getDistance() == b.getDistance(); // wtf!! why this is false but prev is true huh??
+    //return a.getDistance() == b.getDistance(); // wtf!! why this is false but prev is true huh?? works perfectly in linux
 }
 bool operator<(Coord &a, Coord &b)
 {
