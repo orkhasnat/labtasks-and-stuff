@@ -1,3 +1,9 @@
+// Run Commands:
+// javac JDBCconnectTask.java
+// java -cp "ojdbc10.jar;" JDBCconnectTask
+// the quotations are essential in powershell
+// or in one line --> java -cp "ojdbc10.jar;" JDBCconnectTask.java
+
 import java.sql.*;
 
 public class JDBCconnectTask {
