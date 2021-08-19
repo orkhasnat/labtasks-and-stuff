@@ -4,10 +4,6 @@ using std::cin;
 using std::cout;
 using std::endl;
 
-// Write the member function int operator == (int data) to overload the == operator.  Use the standard == operator to compare the weightData data member of the
-// ZooAnimal object to the integer parameter.
-// Write the member function void operator-- (int dec) to overload the auto-decrement operator.Use the standard -= operator to decrease the ZooAnimal object's height by integer parameter (centimeter).
-
 class ZooAnimal
 {
     std::string name;
