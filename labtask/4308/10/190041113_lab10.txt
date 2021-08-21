@@ -1,3 +1,5 @@
+SET SERVEROUTPUT ON; --without this server doesnt output anything on the console
+
 --Task 1
 
 CREATE OR REPLACE FUNCTION total_items_shipped (in_year INT)
@@ -47,7 +49,7 @@ CREATE OR REPLACE FUNCTION profit_estimation(in_year INT)
 	IS
 	gain INT := 0;
 	loss INT := 0;
-	revenue INT := 0;
+	total INT := 0;
 
 BEGIN
 
@@ -67,12 +69,12 @@ BEGIN
 	ORDER_YEAR = in_year
 	AND
 	STATUS=0;
-	revenue := gain-loss;
-	IF revenue*100 > gain*79 THEN
+	total := gain+loss;
+	IF gain*100 > total*79 THEN
 	    DBMS_OUTPUT.PUT_LINE(in_year || '-' || gain || ' (Excellent Year)');
-	ELSIF revenue*100 >= gain*66 THEN
+	ELSIF gain*100 >= total*66 THEN
 	    DBMS_OUTPUT.PUT_LINE(in_year || '-' || gain || ' (Good Year)');
-	ELSIF revenue*100 >= gain*50 THEN
+	ELSIF gain*100 >= total*50 THEN
 	    DBMS_OUTPUT.PUT_LINE(in_year || '-' || gain || ' (Average Year)');
 	ELSE
 	    DBMS_OUTPUT.PUT_LINE(in_year || '-' || gain || ' (A year of losses)');
@@ -80,4 +82,4 @@ BEGIN
 	RETURN gain;
 END;
 /
-Output: 2002 - 6275 (Average Year), 2006 - 7249 (A year of losses), 2017 - 6918 (A year of losses)
+Output: 2002 - 6275 (Good Year), 2006 - 7249 (Average Year), 2017 - 6918 (A year of losses)
