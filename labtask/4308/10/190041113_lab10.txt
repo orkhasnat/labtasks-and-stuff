@@ -1,0 +1,85 @@
+SET SERVEROUTPUT ON; --without this server doesnt output anything on the console
+
+--Task 1
+
+CREATE OR REPLACE FUNCTION total_items_shipped (in_year INT)
+    RETURN INT
+    IS
+    total_items INT := 0;
+BEGIN
+    SELECT SUM(Quantity)
+    INTO total_items
+    FROM ORDERS, ORDER_ITEMS
+    WHERE ORDERS.ORDER_ID = ORDER_ITEMS.ORDER_ID AND ORDERS.ORDER_YEAR = in_year AND STATUS = 1;
+    RETURN total_items;
+END;
+/
+Output: 2002 - 1115, 2006 - 1015, 2017 - 981
+
+--TASK 2
+
+CREATE OR REPLACE FUNCTION most_sold_item (in_year INT)
+	RETURN INT
+	IS
+	max_item INT := 0;
+BEGIN
+	SELECT ITEM_ID
+	INTO max_item
+	FROM
+		(SELECT ITEM_ID, SUM(QUANTITY) as sq
+		FROM ORDERS, ORDER_ITEMS
+		WHERE ORDERS.ORDER_YEAR = in_year
+		AND
+		STATUS = 1
+		AND
+		ORDERS.Order_ID=ORDER_ITEMS.Order_ID
+		GROUP BY ITEM_ID
+		ORDER BY sq DESC
+		)
+		WHERE ROWNUM=1;
+	RETURN max_item;
+END;
+/
+Output: 2002 - 4, 2006 - 4, 2017 - 3
+
+--TASK 3
+
+CREATE OR REPLACE FUNCTION profit_estimation(in_year INT)
+	RETURN INT
+	IS
+	gain INT := 0;
+	loss INT := 0;
+	total INT := 0;
+
+BEGIN
+
+	SELECT SUM(Quantity*PPU) 
+	INTO gain 
+	FROM ORDERS, ORDER_ITEMS
+	WHERE ORDERS.Order_ID = ORDER_ITEMS.Order_ID
+	AND
+	ORDER_YEAR = in_year
+	AND
+	STATUS=1;
+	SELECT SUM(Quantity*PPU) 
+	INTO loss 
+	FROM ORDERS, ORDER_ITEMS
+	WHERE ORDERS.Order_ID = ORDER_ITEMS.Order_ID
+	AND
+	ORDER_YEAR = in_year
+	AND
+	STATUS=0;
+	total := gain+loss;
+	IF gain*100 > total*79 THEN
+	    DBMS_OUTPUT.PUT_LINE(in_year || '-' || gain || ' (Excellent Year)');
+	ELSIF gain*100 >= total*66 THEN
+	    DBMS_OUTPUT.PUT_LINE(in_year || '-' || gain || ' (Good Year)');
+	ELSIF gain*100 >= total*50 THEN
+	    DBMS_OUTPUT.PUT_LINE(in_year || '-' || gain || ' (Average Year)');
+	ELSE
+	    DBMS_OUTPUT.PUT_LINE(in_year || '-' || gain || ' (A year of losses)');
+	END IF;
+	RETURN gain;
+END;
+/
+Output: 2002 - 6275 (Good Year), 2006 - 7249 (Average Year), 2017 - 6918 (A year of losses)
