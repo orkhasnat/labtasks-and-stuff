@@ -7,6 +7,7 @@
 
 class SegmentTree
 {
+protected:
     int *tree;
     //std::vector<int> tree;
     int arrSize;
@@ -83,7 +84,7 @@ class SegmentTree
 public:
     SegmentTree(std::vector<int> &arr)
     {
-        arrSize = arr.size();
+        arrSize = arr.size() - 1; // BEWARE DONT FORGET THE -1
         tree = new int[4 * arrSize];
         init(arr, 1, 1, arrSize);
     }
@@ -105,8 +106,8 @@ public:
     }
 };
 
-class SegTreeLazy
-{ // segment tree with lazy propagation
+class SegTreeLazy // alternative way (no probs fixed it) by shafayet
+{                 // segment tree with lazy propagation
     struct TreeNode
     {
         int prop, data;
@@ -138,7 +139,7 @@ class SegTreeLazy
         if (begin >= i && end <= j) //total overlap
         {
             tree[node].data += newValue * (end - begin + 1); // e-b+1 is the the number of nodes under this node
-            tree[node].prop += newValue;                      // saving this value for adding later
+            tree[node].prop += newValue;                     // saving this value for adding later
             return;
         }
         int left = node * 2;
@@ -176,7 +177,7 @@ class SegTreeLazy
 public:
     SegTreeLazy(std::vector<int> &arr)
     {
-        arrSize = arr.size();
+        arrSize = arr.size() - 1; // BEWARE DONT FORGET THE -1
         tree = new TreeNode[4 * arrSize];
         init(arr, 1, 1, arrSize);
     }
@@ -186,10 +187,61 @@ public:
     }
     int query(int lowerBound, int upperBound)
     {
-        return query(1, 1, arrSize, lowerBound, upperBound,0);
+        return query(1, 1, arrSize, lowerBound, upperBound, 0);
     }
     void update(int i, int j, int newValue)
     {
         update(1, 1, arrSize, i, j, newValue);
     }
 };
+
+// class SegTreeLazy : public SegmentTree // for some reason it doesnt work (┛ಠ_ಠ)┛彡┻━┻
+// {
+//     int *lazy;
+//     void updateLazy(int node, int begin, int end, int i, int j, int val)
+//     {
+//         // taking care of pending updates
+//         if (lazy[node] != 0)
+//         {
+//             tree[node] += lazy[node];
+//             if (begin != end) // if not a leaf node
+//             {
+//                 lazy[node * 2] += lazy[node];
+//                 lazy[node * 2 + 1] += lazy[node];
+//             }
+//             lazy[node] = 0;
+//         }
+
+//         if (begin > i or end < j) //no overlap
+//             return;
+//         if (begin >= i and end < j)
+//         {
+//             tree[node] += val;
+//             if (begin != end)
+//             {
+//                 lazy[node * 2] += val;
+//                 lazy[node * 2 + 1] += val;
+//             }
+//             return;
+//         }
+//         int mid = (begin + end) / 2;
+//         updateLazy(node * 2, begin, mid, i, j, val);
+//         updateLazy(node * 2 + 1, mid + 1, end, i, j, val);
+//         tree[node] = compare(tree[node * 2], tree[node * 2 + 1]);
+//     }
+
+// public:
+//     SegTreeLazy(std::vector<int> &arr) : SegmentTree(arr)
+//     {
+//         //lazy.reserve(arrSize * 4);
+//         lazy = new int[arrSize * 4];
+//     }
+//     ~SegTreeLazy()
+//     {
+//         delete[] lazy;
+//     }
+//     void updateLazy(int i, int j, int newValue)
+//     {
+//         updateLazy(1, 1, arrSize, i, j, newValue);
+//     }
+// };

@@ -1,9 +1,9 @@
-// last vale didnt update
+// fixed the issue
 #include "SegmentTree.cpp"
 using std::cout, std::cin, std::endl;
 int main()
 {
-    int n, q, i, j, val,v;
+    int n, q, i, j, val, v;
     cin >> n >> q;
     std::vector<int> vec;
     vec.push_back(0);
