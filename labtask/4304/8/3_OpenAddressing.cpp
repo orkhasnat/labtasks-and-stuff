@@ -11,11 +11,15 @@
 // In DoubleHashing f(i) can be any other hash function
 // Here in D.H -- f(i) = i*hash2(key) and hash2(key)=R-(key%R) where R better be a Prime Number
 
+// Virtual func means that when derived class calls base class member funcs and executes them if a derived class overidden func is found
+// then that overridden func(derived) gets called instead of base class funcs.
+// Also a virtaul func called from constructor doesnt act virtually! because constructor is supposed to be for its own class
+// Here when calling f() in hash func it tries to call the Hashing::f() but because it is virtual, it searches and finds other overidden
+// f() funcs eg LinearProbing::f() and executes that. 
+
 const int attempts = 6; // attempt to insert
 class Hashing
 {
-    virtual int f(int i) { return 0; } // calling virtual from constructor isnt virtual at all
-
 protected:
     void insert(int num)
     {
@@ -76,17 +80,18 @@ public:
             std::cout << hashTable[i] << " ";
         std::cout << std::endl;
     }
+    virtual int f(int i)=0;// { return 0; } // calling virtual from constructor isnt virtual at all
 };
 class LinearProbing : public Hashing
 {
-    int func(int i)
+    int f(int i)
     {
         return i;
     }
 };
 class QudraticProbing : public Hashing
 {
-    int func(int i)
+    int f(int i)
     {
         return i * i;
     }
@@ -97,6 +102,7 @@ class DoubleHashing : public Hashing
     {
         return (num + f(i, num)) % hashtableSize;
     }
+    int f(int i){return 0;}
     int f(int i, int key)
     {
         return i * hash2(key);
