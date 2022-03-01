@@ -1,0 +1,7 @@
+The problem asks us to figure out the shortest distance between the first node and he last node.
+The special condition here is that, we need a necessary amount of energy to go from one node to another and in each node we have a infinite supply of foods which replenishes our energy bar.
+Meaning When we reach a node we will refigure the weight ofthe node by this equation: 
+    weight= energy required-energy gain.
+Following this equation, we can figure out that the weights of the node can be negetive and there may even be a negetive weight cycle.
+To find the shortest distance from node 1 to the last one we need to apply the bellman ford algorithm.
+But in case of negetive weight cycle in the grap, we cant find any shortest path using any algorithm. On those cases, the problem would be unsolvable. 
