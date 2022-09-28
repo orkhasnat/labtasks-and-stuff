@@ -1,0 +1,38 @@
+-- Task 1
+SET SERVEROUTPUT ON;
+
+DECLARE
+    CUR_YEAR VARCHAR(10) := TO_CHAR(SYSDATE, 'YYYY');
+ -- cur_year INTEGER :=2092;
+BEGIN
+ --1st part
+    IF (CUR_YEAR = 2000) OR (CUR_YEAR = 2010) OR (CUR_YEAR = 2020) OR (CUR_YEAR = 2030) OR (CUR_YEAR = 2040) OR (CUR_YEAR = 2050) OR (CUR_YEAR = 2060) OR (CUR_YEAR = 2070) OR (CUR_YEAR = 2080) OR (CUR_YEAR = 2090) THEN
+        DBMS_OUTPUT.PUT_LINE('Yes');
+    ELSE
+        DBMS_OUTPUT.PUT_LINE('No');
+    END IF;
+ -- 2nd part
+    CASE
+        WHEN CUR_YEAR < 2010 THEN
+            DBMS_OUTPUT.PUT_LINE('The 2000s');
+        WHEN CUR_YEAR < 2020 THEN
+            DBMS_OUTPUT.PUT_LINE('The 2010s');
+        WHEN CUR_YEAR < 2030 THEN
+            DBMS_OUTPUT.PUT_LINE('The 2020s');
+        WHEN CUR_YEAR < 2040 THEN
+            DBMS_OUTPUT.PUT_LINE('The 2030s');
+        WHEN CUR_YEAR < 2050 THEN
+            DBMS_OUTPUT.PUT_LINE('The 2040s');
+        WHEN CUR_YEAR < 2060 THEN
+            DBMS_OUTPUT.PUT_LINE('The 2050s');
+        WHEN CUR_YEAR < 2070 THEN
+            DBMS_OUTPUT.PUT_LINE('The 2060s');
+        WHEN CUR_YEAR < 2080 THEN
+            DBMS_OUTPUT.PUT_LINE('The 2070s');
+        WHEN CUR_YEAR < 2090 THEN
+            DBMS_OUTPUT.PUT_LINE('The 2080s');
+        ELSE
+            DBMS_OUTPUT.PUT_LINE('The 2090s');
+    END CASE;
+END;
+/
