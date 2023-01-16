@@ -1,0 +1,27 @@
+NH2SXQwcBdpmTEzi3bvBHMM9H66vVXjL	cat readme
+rRGizSaX8Mk1RTb1CNQoXTcYZWU6lgzi	cat ./-
+aBZ0W5EmUfAf7kHTQeOwd8bauFJ2lAiG	cat spaces\ in\ this\ filename	
+2EW7BBsr6aMMoJ2HjW067dm8EgX26xNe	cat inhere/.hidden
+lrIWWI6bB37kxfiCQZqUdOIYfr6eEeqR	cat -- inhere/-file07
+P4L4vucdmLnm8I7Vl7jG1ApGSfjYKqJU	find . -readable -size 1033c ! -executable -exec cat {} \;
+z7WtoNQU2XfjmMtWA8u5rN4vzqu4v99S	find / -user bandit7 -a -group bandit6 -a -size 33c -exec cat {} \; 2>/dev/null
+TESKZC0XvTetK0S9xNwm25STk5iWrBvP	grep millionth data.txt | cut -f 2
+EN632PlfYiZbn3PhVK3XOGSlNInNE00t	sort data.txt | uniq -u
+G7w8LIi6J3kTb8A7j9LgrywtEUlyyp6s	strings data.txt | grep =*
+6zPeziLdR2RKNdNYFNb6nVCKzphlXHBM	base64 -d data.txt | cut -d' ' -f 4
+JVNBBFSmZwKKOP0XbFXOoW8chDz5yVRv	tr a-zA-Z n-za-mN-ZA-M < data.txt |cut -d" " -f 4
+wbWdlBxEir4CaE8LaPhauuOo6pwRmrDw	fuck this one : xxd -r,gzip -d,bunzip2,gzip -d,... tar xvf thrice ,gzip again atlast cat
+fGrHPx402xGC7U7rXKDaxiWFTOiF0ENq	ssh -i sshkey.private bandit14@bandit.labs.overthewire.org -p 2220
+jN2kgmIXJ6fShzhT2avhotn4Zcka6tnt	nc localhost 30000
+JQttfApK4SeyHwDlI9SXGR50qclOAil1	openssl s_client -connect localhost:30001
+VwOSWtCA7lRKkTfbr2IDh6awj9RNZM5e	nmap -p 31000-32000 localhost; openssl s_client -connect localhost:31790
+hga5tuuCLF6fFzUpnagiMN8ssu9LFrdg	diff passwords.new passwords.old
+awhqfNnAbc1naukrpqDYcF95h7HoMTrC	scp -P 2220 bandit18@bandit.labs.overthewire.org:/home/bandit18/readme 000j && cat 000j && rm 000j
+VxCazJaVykI6W36BkBU0mJTCM8rR95XT	./bandit20-do cat /etc/bandit_pass/bandit20
+NvEJF7oVjkddltPSrdKEFOllh9V1IBcq	need two terminals; nc -l localhost 3300 in one; ./suconnect 3300 in another
+WdDozAdTM2z9DiFEQ2mGlwngMfj4EZff	cat /tmp/t7O6lds9S0RqQh9aMcz6ShpAoZKF7fgv
+QYw0Y2aiA672PsMmh9puTQuhoz8SyR2G	echo I am user bandit23 | md5sum | cut -d ' ' -f 1 | xargs -I {} cat /tmp/{}
+VAfGXJ1PBSsPSnvsjI8p759leLZ9GGar	mkdir /tmp/danke && cp /etc/bandit_pass/bandit24 /tmp/danke/pass
+p7TaowMYrmu23Ol8hiZh9UvD0O9hpx8d	#9458 #bit problematic though for i in {0000..9999};do res=$(echo "VAfGXJ1PBSsPSnvsjI8p759leLZ9GGar $i" | nc localhost 30002) ; echo "$i $res";sleep 1; done
+
+
