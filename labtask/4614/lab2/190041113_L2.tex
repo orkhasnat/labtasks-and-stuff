@@ -1,0 +1,61 @@
+\documentclass[a4paper,18pts]{article}
+\usepackage[utf8]{inputenc}
+% math package
+\usepackage{amsmath}
+\usepackage{amssymb}
+% font package
+\usepackage{tgbonum}
+
+\usepackage{hyperref}
+
+\title{\huge{Hyperfactorial}}
+\author{\small{Tasnimul Hasnat\\190041113}}
+\date{\small{January 17 2023}}
+
+\begin{document}
+
+\maketitle
+\section{Hyperfactorial}
+The hyperfactorial (Sloane and Plouffe 1995) is the function defined by 
+\begin{equation}\label{1}
+H(n) = K(n+1) = \prod_{k=1}^{n}k^{k},
+\end{equation}
+ where $K(n)$ is the K-function.\\
+The hyperfactorial is implemented in the Wolfram Language as Hyperfactorial[n].\\
+For integer values n=1, 2, ... are 1, 4, 108, 27648, 86400000, 4031078400000, 3319766398771200000, ... (OEIS A002109). \\
+ The hyperfactorial can also be generalized to complex numbers, as illustrated above.\\
+The Barnes G-function and hyperfactorial $H(z)$ satisfy the relation 
+\begin{equation}\label{2}
+    H(z-1)G(z) = e^{(z-1)\log{\Gamma(z)}}
+\end{equation}
+for all complex $z$.\\
+The hyperfactorial is given by the integral 
+\begin{equation}\label{3}
+    H(z) = (2\pi)^{-\frac{z}{2}}e^{(z+1)/2 + \int_0^z \ln(t!) dt}
+\end{equation}
+and the closed-form expression 
+\begin{equation}\label{4}
+    K(z) = e^{\zeta^{'}(-1,z+1) - \zeta^{'}(-1)}
+\end{equation}
+for $R[z]>0$, where $\zeta(z)$ is the Riemann zeta function, $\zeta^{'}(z)$ its derivative, $\zeta(a,z)$ is the Hurwitz zeta function, and 
+\begin{equation}\label{5}
+    \zeta^{'}(a,z) = \left[\frac{\partial\zeta(s,z)}{\partial s}\right]_{s=a}
+\end{equation}
+$H(z)$ also has a Stirling-like series 
+\begin{equation}\label{6}
+    H(z) \sim Ae^{-\frac{z^2}{4}}z^{\frac{z(z+1)}{2}+\frac{1}{12}}  \times(1+\frac{1}{720z^2}-\frac{1433}{7257600z^4}+\dots)
+\end{equation} \\
+(OEIS A143475 and A143476). \\
+$H(-1/2)$ has the special value 
+\begin{align}\label{7}
+    H(-1/2) &= e^{-\frac{[\ln{2}/3 + 12\zeta^{'}(-1)]}{8}} \\
+    &= 2^{\frac{1}{12}}\pi^{\frac{1}{8}}e^{\frac{[\gamma - 1 - \zeta^{'}(2)/\zeta(2)]}{8}} \\
+    &= \frac{A^{3/2}}{2^{1/24}e^{1/8}},    
+\end{align}
+where $\gamma$ is the Euler-Mascheroni constant and $A$ is the Glaisher-Kinkelin constant. \\
+The derivative is given by 
+\begin{equation}\label{8}
+    \frac{dH(x)}{dx}=H(x)\left(\frac{1}{2}\left[1-\ln(2\pi)\right]+\ln(\Gamma(x+1))+x\right)
+\end{equation}
+
+\end{document}
