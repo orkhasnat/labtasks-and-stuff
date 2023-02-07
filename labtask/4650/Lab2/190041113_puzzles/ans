@@ -1,0 +1,39 @@
+int bitOr(int x, int y){
+  return ~(~x & ~y);
+}
+
+int minusOne(void){
+  return ~(0x00);
+}
+
+int tmax(void){
+  return ~(0x01 << 31);
+}
+
+int byteSwap(int x, int n, int m){
+  return (x & ~(0xff << (m << 3)) & ~(0xff << (n << 3))) | (((x >> (m << 3)) & 0xff) << (n << 3)) | (((x >> (n << 3)) & 0xff) << (m << 3));
+}
+
+int copyLSB(int x){
+  return (x << 31) >> 31;
+}
+
+int bitMask(int highbit, int lowbit){
+  return ~(~0 << highbit << 1) & (~0 << lowbit);
+}
+
+int conditional(int x, int y, int z){
+  return (~(~0x00 + !(!x)) & y) | ((~0x00 + !(!x)) & z);
+}
+
+int isAsciiDigit(int x){
+  return !((x + (~0x30 + 1)) >> 31 & 1) & !((0x39 + (~x + 1)) >> 31 & 1);
+}
+
+int absVal(int x){
+  return ((x >> 31) ^ x) + (1 & (x >> 31));
+}
+
+int isNonZero(int x){
+  return ((x | (~x + 1)) >> 31) & 1;
+}
