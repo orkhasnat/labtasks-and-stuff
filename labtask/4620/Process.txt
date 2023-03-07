@@ -1,0 +1,26 @@
+.More Updates To Come
+
+INSTRUCTIONS:
+	First check if the COM port is connected physically.
+	Only the port COM1-4 are available to use the Kit.
+	Next use the batch file to generate the the necessary files. We would want to run the <TO_BE_ADDED_LATER> file
+	Run the WinMDA-8086 program.
+	Change the Kit to Serial Monitor(PC) mode.
+	Press the RESET button. It will modify the prompt in the program.
+	Now press 'L' and when the prompt says 'Downloading' or something like that press PgUp button.
+	Now provide the file path.
+	The downloading will be complete.
+
+	Now change the Kit to Machine Mode.
+	Press RESET again in case of any problems.
+
+	Pressing GO is supposed to work now.
+
+
+
+BEWARE:
+	1. The file must not have any numbers in it. It mostly follows C like filenames. But stick to lowercase names.
+	2. Also the file name should not be larger than six characters :)
+	3. Remember to change from PC mode to Monitor mode after uploading.
+	4. Remember to use the correct ports. Otherwise it would not work. More on that in the future.
+	
