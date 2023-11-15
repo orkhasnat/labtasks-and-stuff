@@ -1,0 +1,54 @@
+# Intro
+So, what exactly is IP security? IP security, colloquially known as IPsec, is a set of protocols crafted by the IETF, the standards organization overseeing all things networking. Its purpose is to furnish a layer of security at the network or IP layer, hence the name.
+
+# Overview
+Before the advent of IPsec, we already had TLS, SSL, SSH, each designed for specific applications like web browsing or remote login. However, what about the security of data as it hops from one router to another? 
+
+Traditional IP communication sends data in plaintext, making it susceptible to eavesdropping. Anyone with network access can intercept and read the transmitted information. Data can be altered or tampered with during transit, and impersonation becomes a significant concern. Any joe-schmoe can pretend to be someone important. 
+
+To counteract such vulnerabilities, IPsec was proposed. Although first defined in 1995 through RFC 1825 to 1829, the current version was outlined in 2005 via RFC 4301.
+
+
+
+# Overview 2
+The IP security architecture employs two protocols: Authentication Header and Encapsulating Security Payload (ESP), ensuring authentication and confidentiality, respectively. Additionally, it provides a framework for authenticated key exchange through ISAKMP, IKE, etc.
+
+Each of these will be elaborated on in greater detail throughout the presentation. 
+
+
+
+# Sec Arch
+IPsec can be operated in two modes: either in transport mode to deliver service from host to host or from host to gateway. It operates within the same network but can also be end to end across networks.
+
+On the contrary, tunnel mode is used to deliver service from gateway to gateway or from host to gateway. Normally the gateways are owned by the same organization with an insecure network in the  middle.
+
+
+
+# Transport Mode
+In transport mode, only the payload of the IP packet coming form the transport layer is encrypted and authenticated.
+The IPSec layer sits between the transport and network layer encapsulating the transport segment.
+Notably, the IP header remains unencrypted, added after the IPsec layer.
+
+
+
+# Tunnel Mode 
+In tunnel mode, the entire IP packet, including the IP header, is encapsulated in an additional IP packet. 
+This additional IP packet is then encrypted and authenticated using ESP or AH. 
+The encapsulated IP packet is then sent to the destination, where it is decrypted and authenticated.
+The original IP packet is then delivered to the intended recipient.
+
+
+
+# Comparison
+The main difference between two arises in their architecture. Transport mode offers less security  for low latency and overhead, skipping a layer of encapsulation and encryption whereas tunnel mode provides comprehensive security.
+Due to its low latency, transport mode is utilized in Voice over IP (VoIP) and video conferencing.
+While tunnel mode is the widely used mode of operation, especially when packets traverse untrusted networks like the Internet.
+
+
+# Data encapsulation
+Moving on,
+IPSec defines two protocols the Authentication Header (AH) Protocol specified in the RFC 2402 and the Encapsulating Security Payload (ESP) Protocol in RFC 2406 to provide authentication and encryption for packets at the IP level.
+
+
+# Thanks
+Now Shadid will continue on with the Authentication Header.
