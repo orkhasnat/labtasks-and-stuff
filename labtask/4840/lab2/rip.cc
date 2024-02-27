@@ -1,5 +1,3 @@
-// 190041113
-
 #include "ns3/core-module.h"
 #include "ns3/csma-module.h"
 #include "ns3/internet-apps-module.h"
@@ -8,18 +6,22 @@
 #include "ns3/ipv4-static-routing-helper.h"
 #include "ns3/mobility-module.h"
 #include "ns3/netanim-module.h"
-#include <cstdint>
+
+#include <fstream>
+
 using namespace ns3;
 
-NS_LOG_COMPONENT_DEFINE("RIP-SimpleRouting");
+NS_LOG_COMPONENT_DEFINE("RipSimpleRouting");
 
-void TearDownLink(Ptr<Node> nodeA, Ptr<Node> nodeB, uint32_t interfaceA, uint32_t interfaceB)
+void
+TearDownLink(Ptr<Node> nodeA, Ptr<Node> nodeB, uint32_t interfaceA, uint32_t interfaceB)
 {
     nodeA->GetObject<Ipv4>()->SetDown(interfaceA);
     nodeB->GetObject<Ipv4>()->SetDown(interfaceB);
 }
 
-void SetMobility(Ptr<Node> node, double x, double y)
+void
+SetMobility(Ptr<Node> node, double x, double y)
 {
     MobilityHelper mobility;
     mobility.SetMobilityModel("ns3::ConstantPositionMobilityModel");
@@ -29,7 +31,8 @@ void SetMobility(Ptr<Node> node, double x, double y)
     mobility.Install(node);
 }
 
-int main(int argc, char** argv)
+int
+main(int argc, char** argv)
 {
     bool verbose = false;
     bool printRoutingTables = true;
@@ -37,6 +40,10 @@ int main(int argc, char** argv)
     std::string SplitHorizon("PoisonReverse");
 
     CommandLine cmd(__FILE__);
+    cmd.AddValue("verbose", "turn on log components", verbose);
+    cmd.AddValue("printRoutingTables",
+                 "Print routing tables at 30, 60 and 90 seconds",
+                 printRoutingTables);
     cmd.AddValue("showPings", "Show Ping6 reception", showPings);
     cmd.AddValue("splitHorizonStrategy",
                  "Split Horizon strategy to use (NoSplitHorizon, SplitHorizon, PoisonReverse)",
@@ -69,55 +76,70 @@ int main(int argc, char** argv)
     }
 
     NS_LOG_INFO("Create nodes.");
-    NodeContainer hosts;
-    hosts.Create(4);
-    NodeContainer routers;
-    routers.Create(5);
+    // Hosts
+    Ptr<Node> n0 = CreateObject<Node>();
+    Names::Add("Host1", n0);
+    Ptr<Node> n1 = CreateObject<Node>();
+    Names::Add("Host2", n1);
+    Ptr<Node> n2 = CreateObject<Node>();
+    Names::Add("Host3", n2);
+    Ptr<Node> n8 = CreateObject<Node>();
+    Names::Add("Host4", n8);
 
-    Names::Add("n0", hosts.Get(0));
-    Names::Add("n1", hosts.Get(1));
-    Names::Add("n2", hosts.Get(2));
-    Names::Add("n8", hosts.Get(3));
+    // Routers
+    Ptr<Node> n3 = CreateObject<Node>();
+    Names::Add("Router1", n3);
+    Ptr<Node> n4 = CreateObject<Node>();
+    Names::Add("Router2", n4);
+    Ptr<Node> n5 = CreateObject<Node>();
+    Names::Add("Router3", n5);
+    Ptr<Node> n6 = CreateObject<Node>();
+    Names::Add("Router4", n6);
+    Ptr<Node> n7 = CreateObject<Node>();
+    Names::Add("Router5", n7);
 
-    Names::Add("n3", routers.Get(0));
-    Names::Add("n4", routers.Get(1));
-    Names::Add("n5", routers.Get(2));
-    Names::Add("n6", routers.Get(3));
-    Names::Add("n7", routers.Get(4));
+    NodeContainer net1(n0, n3);
+    NodeContainer net2(n1, n3);
+    NodeContainer net3(n2, n3);
+    NodeContainer net4(n3, n4);
+    
+    NodeContainer net5(n4, n5);
+    NodeContainer net6(n4, n6);
+    NodeContainer net7(n4, n7);
+    NodeContainer net8(n5, n6);
+    NodeContainer net9(n5, n7);
+    NodeContainer net10(n6, n7);
+    
+    NodeContainer net11(n7, n8);
+    NodeContainer routers(n3, n4, n5, n6, n7);
+    NodeContainer nodes(n0, n1, n2, n8);
 
-    auto d = 5;
-    SetMobility(hosts.Get(0), d * 3.0, -d * 4.0);
-    SetMobility(hosts.Get(1), d * 4.0, -d * 4.0);
-    SetMobility(hosts.Get(2), d * 4.0, -d * 3.0);
-    SetMobility(hosts.Get(3), d * 0.0, -d * 0.0);
 
-    SetMobility(routers.Get(0), d * 3.0, -d * 3.0);
-    SetMobility(routers.Get(1), d * 2.0, -d * 2.0);
-    SetMobility(routers.Get(2), d * 2.0, -d * 1.0);
-    SetMobility(routers.Get(3), d * 1.0, -d * 2.0);
-    SetMobility(routers.Get(4), d * 1.0, -d * 1.0);
+    SetMobility(nodes.Get(0), 30.0,0.0);
+    SetMobility(nodes.Get(1), 40.0, 10.0);
+    SetMobility(nodes.Get(2), 50.0, 20);
+    SetMobility(nodes.Get(3), 0.0, 50.0);
 
+    SetMobility(routers.Get(0), 30.0,20.0);
+    SetMobility(routers.Get(1), 20,30);
+    SetMobility(routers.Get(2), 20,40);
+    SetMobility(routers.Get(3), 10.0, 30.0);
+    SetMobility(routers.Get(4), 10.0,40.0);
     NS_LOG_INFO("Create channels.");
     CsmaHelper csma;
     csma.SetChannelAttribute("DataRate", DataRateValue(5000000));
     csma.SetChannelAttribute("Delay", TimeValue(MilliSeconds(2)));
-
-    std::vector<NetDeviceContainer> devAdjList;
-    devAdjList.push_back(csma.Install(NodeContainer(hosts.Get(0), routers.Get(0))));
-    devAdjList.push_back(csma.Install(NodeContainer(hosts.Get(1), routers.Get(0))));
-    devAdjList.push_back(csma.Install(NodeContainer(hosts.Get(2), routers.Get(0))));
-    devAdjList.push_back(csma.Install(NodeContainer(hosts.Get(3), routers.Get(4))));
-
-    devAdjList.push_back(csma.Install(NodeContainer(routers.Get(0), routers.Get(1))));
-    devAdjList.push_back(csma.Install(NodeContainer(routers.Get(1), routers.Get(2))));
-    devAdjList.push_back(csma.Install(NodeContainer(routers.Get(1), routers.Get(3))));
-    // teardown at 30s
-    devAdjList.push_back(csma.Install(NodeContainer(routers.Get(1), routers.Get(4))));
-    // teardown at 50s
-    devAdjList.push_back(csma.Install(NodeContainer(routers.Get(2), routers.Get(3))));
-    // the following two links will have costs 5 and 10 in the rip
-    devAdjList.push_back(csma.Install(NodeContainer(routers.Get(2), routers.Get(4))));
-    devAdjList.push_back(csma.Install(NodeContainer(routers.Get(3), routers.Get(4))));
+    NetDeviceContainer ndc1 = csma.Install(net1);
+    NetDeviceContainer ndc2 = csma.Install(net2);
+    NetDeviceContainer ndc3 = csma.Install(net3);
+    NetDeviceContainer ndc4 = csma.Install(net4);
+    NetDeviceContainer ndc5 = csma.Install(net5);
+    NetDeviceContainer ndc6 = csma.Install(net6);
+    NetDeviceContainer ndc7 = csma.Install(net7);
+    NetDeviceContainer ndc8 = csma.Install(net8);
+    NetDeviceContainer ndc9 = csma.Install(net9);
+    NetDeviceContainer ndc10 = csma.Install(net10);
+    NetDeviceContainer ndc11 = csma.Install(net11);
 
     NS_LOG_INFO("Create IPv4 and routing");
     RipHelper ripRouting;
@@ -125,20 +147,21 @@ int main(int argc, char** argv)
     // Rule of thumb:
     // Interfaces are added sequentially, starting from 0
     // However, interface 0 is always the loopback...
-    ripRouting.ExcludeInterface(routers.Get(0), 1);
-    ripRouting.ExcludeInterface(routers.Get(0), 2);
-    ripRouting.ExcludeInterface(routers.Get(0), 3);
-    ripRouting.ExcludeInterface(routers.Get(4), 1);
+    //
+    ripRouting.ExcludeInterface(n3, 1);
+    ripRouting.ExcludeInterface(n3, 2);
+    ripRouting.ExcludeInterface(n3, 3);
+    ripRouting.ExcludeInterface(n7, 4);
 
-    ripRouting.SetInterfaceMetric(routers.Get(2), 3, 5);
-    ripRouting.SetInterfaceMetric(routers.Get(4), 3, 5);
+    ripRouting.SetInterfaceMetric(n5, 3, 5);
+    ripRouting.SetInterfaceMetric(n7, 2, 5);
 
-    ripRouting.SetInterfaceMetric(routers.Get(3), 3, 10);
-    ripRouting.SetInterfaceMetric(routers.Get(4), 4, 10);
+    ripRouting.SetInterfaceMetric(n6, 3, 10);
+    ripRouting.SetInterfaceMetric(n7, 3, 10);
 
     Ipv4ListRoutingHelper listRH;
     listRH.Add(ripRouting, 0);
-
+   
     InternetStackHelper internet;
     internet.SetIpv6StackInstall(false);
     internet.SetRoutingHelper(listRH);
@@ -146,34 +169,61 @@ int main(int argc, char** argv)
 
     InternetStackHelper internetNodes;
     internetNodes.SetIpv6StackInstall(false);
-    internetNodes.Install(hosts);
+    internetNodes.Install(nodes);
 
-    // Assign addresses.
-    // The source and destination networks have global addresses
-    // The "core" network just needs link-local addresses for routing.
-    // We assign global addresses to the routers as well to receive
-    // ICMPv6 errors.
+  
     NS_LOG_INFO("Assign IPv4 Addresses.");
     Ipv4AddressHelper ipv4;
 
-    std::vector<Ipv4InterfaceContainer> IICs;
-    for (uint32_t i = 0; i < devAdjList.size(); i++)
-    {
-        std::stringstream subnet;
-        subnet << "10.0." << i << ".0";
-        ipv4.SetBase(Ipv4Address(subnet.str().c_str()), Ipv4Mask("255.255.255.0"));
-        IICs.push_back(ipv4.Assign(devAdjList[i]));
-    }
+    ipv4.SetBase(Ipv4Address("10.0.0.0"), Ipv4Mask("255.255.255.0"));
+    Ipv4InterfaceContainer iic1 = ipv4.Assign(ndc1);
 
-    for (uint32_t i = 0; i < 4; i++)
-    {
-        Ptr<Ipv4StaticRouting> staticRouting;
-        Ptr<Node> n = hosts.Get(i);
-        staticRouting = Ipv4RoutingHelper::GetRouting<Ipv4StaticRouting>(
-            n->GetObject<Ipv4>()->GetRoutingProtocol());
-        staticRouting->SetDefaultRoute(IICs[i].GetAddress(1), 1);
-    }
+    ipv4.SetBase(Ipv4Address("10.0.1.0"), Ipv4Mask("255.255.255.0"));
+    Ipv4InterfaceContainer iic2 = ipv4.Assign(ndc2);
 
+    ipv4.SetBase(Ipv4Address("10.0.2.0"), Ipv4Mask("255.255.255.0"));
+    Ipv4InterfaceContainer iic3 = ipv4.Assign(ndc3);
+
+    ipv4.SetBase(Ipv4Address("10.0.3.0"), Ipv4Mask("255.255.255.0"));
+    Ipv4InterfaceContainer iic4 = ipv4.Assign(ndc4);
+
+    ipv4.SetBase(Ipv4Address("10.0.4.0"), Ipv4Mask("255.255.255.0"));
+    Ipv4InterfaceContainer iic5 = ipv4.Assign(ndc5);
+
+    ipv4.SetBase(Ipv4Address("10.0.5.0"), Ipv4Mask("255.255.255.0"));
+    Ipv4InterfaceContainer iic6 = ipv4.Assign(ndc6);
+
+    ipv4.SetBase(Ipv4Address("10.0.6.0"), Ipv4Mask("255.255.255.0"));
+    Ipv4InterfaceContainer iic7 = ipv4.Assign(ndc7);
+    
+    ipv4.SetBase(Ipv4Address("10.0.7.0"), Ipv4Mask("255.255.255.0"));
+    Ipv4InterfaceContainer iic8 = ipv4.Assign(ndc8);
+    
+    ipv4.SetBase(Ipv4Address("10.0.8.0"), Ipv4Mask("255.255.255.0"));
+    Ipv4InterfaceContainer iic9 = ipv4.Assign(ndc9);
+    
+    ipv4.SetBase(Ipv4Address("10.0.9.0"), Ipv4Mask("255.255.255.0"));
+    Ipv4InterfaceContainer iic10 = ipv4.Assign(ndc10);
+    
+    ipv4.SetBase(Ipv4Address("10.0.10.0"), Ipv4Mask("255.255.255.0"));
+    Ipv4InterfaceContainer iic11 = ipv4.Assign(ndc11);
+
+
+    Ptr<Ipv4StaticRouting> staticRouting;
+    staticRouting = Ipv4RoutingHelper::GetRouting<Ipv4StaticRouting>(
+        n0->GetObject<Ipv4>()->GetRoutingProtocol());
+    staticRouting->SetDefaultRoute("10.0.0.2", 1);
+    staticRouting = Ipv4RoutingHelper::GetRouting<Ipv4StaticRouting>(
+        n1->GetObject<Ipv4>()->GetRoutingProtocol());
+    staticRouting->SetDefaultRoute("10.0.1.2", 1);
+    staticRouting = Ipv4RoutingHelper::GetRouting<Ipv4StaticRouting>(
+        n2->GetObject<Ipv4>()->GetRoutingProtocol());
+    staticRouting->SetDefaultRoute("10.0.2.2", 1);
+    staticRouting = Ipv4RoutingHelper::GetRouting<Ipv4StaticRouting>(
+        n8->GetObject<Ipv4>()->GetRoutingProtocol());
+    staticRouting->SetDefaultRoute("10.0.10.1", 1);
+
+  
     if (printRoutingTables)
     {
         RipHelper routingHelper;
@@ -191,8 +241,8 @@ int main(int argc, char** argv)
 
     NS_LOG_INFO("Create Applications.");
     uint32_t packetSize = 1024;
-    Time interPacketInterval = Seconds(0.5);
-    V4PingHelper ping(IICs[3].GetAddress(0));
+    Time interPacketInterval = Seconds(1.0);
+    V4PingHelper ping("10.0.10.2");
 
     ping.SetAttribute("Interval", TimeValue(interPacketInterval));
     ping.SetAttribute("Size", UintegerValue(packetSize));
@@ -201,38 +251,33 @@ int main(int argc, char** argv)
         ping.SetAttribute("Verbose", BooleanValue(true));
     }
     ApplicationContainer apps;
-    for (uint32_t i = 0; i < 3; i++)
-    {
-        apps.Add(ping.Install(hosts.Get(i)));
-    }
-    apps.Start(Seconds(1));
-    apps.Stop(Seconds(100));
+    apps.Add(ping.Install(n0));
+    apps.Add(ping.Install(n1));
+    apps.Add(ping.Install(n2));
+    apps.Start(Seconds(1.0));
+    apps.Stop(Seconds(150.0));
 
-    /* AsciiTraceHelper ascii; */
-    /* csma.EnableAsciiAll(ascii.CreateFileStream("rip-simple-routing.tr")); */
-    /* csma.EnablePcapAll("rip-simple-routing", true); */
-
-    Simulator::Schedule(Seconds(30), &TearDownLink, routers.Get(1), routers.Get(4), 4, 2);
-    Simulator::Schedule(Seconds(50), &TearDownLink, routers.Get(2), routers.Get(3), 2, 2);
-
-    AnimationInterface anim("190041113.xml");
-    anim.SetConstantPosition(hosts.Get(0), d * 3.0, -d * 4.0);
-    anim.SetConstantPosition(hosts.Get(1), d * 4.0, -d * 4.0);
-    anim.SetConstantPosition(hosts.Get(2), d * 4.0, -d * 3.0);
-    anim.SetConstantPosition(hosts.Get(3), d * 0.0, -d * 0.0);
-
-    anim.SetConstantPosition(routers.Get(0), d * 3.0, -d * 3.0);
-    anim.SetConstantPosition(routers.Get(1), d * 2.0, -d * 2.0);
-    anim.SetConstantPosition(routers.Get(2), d * 2.0, -d * 1.0);
-    anim.SetConstantPosition(routers.Get(3), d * 1.0, -d * 2.0);
-    anim.SetConstantPosition(routers.Get(4), d * 1.0, -d * 1.0);
+    Simulator::Schedule(Seconds(30), &TearDownLink, n4, n7, 4, 1);
+    Simulator::Schedule(Seconds(50), &TearDownLink, n5, n6, 2, 2);
 
     /* Now, do the actual simulation. */
+    AnimationInterface anim("lab2p.xml");
+    SetMobility(nodes.Get(0), 30.0,0.0);
+    SetMobility(nodes.Get(1), 40.0, 10.0);
+    SetMobility(nodes.Get(2), 50.0, 20);
+    SetMobility(nodes.Get(3), 0.0, 50.0);
+
+    SetMobility(routers.Get(0), 30.0,20.0);
+    SetMobility(routers.Get(1), 20,30);
+    SetMobility(routers.Get(2), 20,40);
+    SetMobility(routers.Get(3), 10.0, 30.0);
+    SetMobility(routers.Get(4), 10.0,40.0);
     NS_LOG_INFO("Run Simulation.");
-    Simulator::Stop(Seconds(100.0));
+    Simulator::Stop(Seconds(150.0));
     Simulator::Run();
     Simulator::Destroy();
     NS_LOG_INFO("Done.");
 
     return 0;
 }
+
